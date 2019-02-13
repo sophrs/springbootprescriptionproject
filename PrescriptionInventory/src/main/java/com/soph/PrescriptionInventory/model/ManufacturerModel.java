@@ -22,18 +22,28 @@ public class ManufacturerModel implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long manufacturerid;
+	private Integer manufacturerid;
 
 	private String manufacturer_name;
 	private String phone_number;
 	private String address;	
 	
+	public ManufacturerModel() {
+		
+	}
 	
-	public Long getmanId() {
+	public ManufacturerModel(String manufacname, String phonenum, String address) {
+		this.manufacturer_name = manufacname;
+		this.phone_number = phonenum;
+		this.address = address;
+	}
+	
+	
+	public Integer getmanId() {
 		return manufacturerid;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.manufacturerid = id;
 	}
 

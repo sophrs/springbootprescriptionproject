@@ -1,6 +1,5 @@
 package integration;
 
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -22,18 +21,20 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.soph.PrescriptionInventory.PrescriptionInventoryApplication;
 import com.soph.PrescriptionInventory.model.MedicationModel;
+import com.soph.PrescriptionInventory.model.StockCheckModel;
 import com.soph.PrescriptionInventory.repository.MedicationRepository;
+import com.soph.PrescriptionInventory.repository.StoreCheckRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {PrescriptionInventoryApplication.class})
 @AutoConfigureMockMvc
-public class MedicationIntegrationTest {
+public class StoreCheckIntegrationTest {
 	
 	@Autowired
 	private MockMvc mvc;
 	
 	@Autowired
-	private MedicationRepository myRepo;
+	private StoreCheckRepository myRepo;
 
 	@Before
 	public void clearDB() {
@@ -41,47 +42,39 @@ public class MedicationIntegrationTest {
 	}
 	
 	@Test
-	public void findandretreivemedicationfromdb() throws Exception{
-		myRepo.save(new MedicationModel("Paracetamol","123456789", 23));
-		mvc.perform(get("/api/medication")
+	public void findandretreivestockcheckfromdb() throws Exception{
+		myRepo.save(new StockCheckModel((long) 23, 123, 23));
+		mvc.perform(get("/api/storecheck")
 				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
+				.andExpect(status()
+						.isOk())
 				.andExpect(content()
 				.contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$[0]medicationName", is("Paracetamol")));
+				.andExpect(jsonPath("$[0]storeid", is(23)));
 	}
 	
 	@Test
-	public void addMedicationToDatabaseTest() throws Exception{
-			mvc.perform(MockMvcRequestBuilders.post("/api/medication")
+	public void addStockCheckToDatabaseTest() throws Exception{
+			mvc.perform(MockMvcRequestBuilders.post("/api/storecheck")
 					.contentType(MediaType.APPLICATION_JSON)
-					.content("{\"medicationName\" : \"Paracetamol\", \"nhsnum\" : \"123456789\", \"manufacturerid\":23}"))
+					.content("{\"storeid\" : 12 , \"stockno\" : 234, \"minimumstockno\": 23}"))
 			.andExpect(status()
 					.isOk())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$.medicationName", is("Paracetamol")));
-	}
-	
-	@Test
-	public void deleteMedicationfromDatabaseTest() throws Exception{
-		MedicationModel model1 = new MedicationModel("Paracetamol","123456789", 23);
-		myRepo.save(model1);
-		mvc.perform(delete("/api/medication/"+ model1.getmedId())).andExpect(status().isOk());
+			.andExpect(jsonPath("$.stockno", is(234)));
 	}
 	
 	@Test
 	public void updateMedicationonDatabaseTest() throws Exception{
-		MedicationModel model1 = new MedicationModel("Paracetamol","123456789", 23);
+		StockCheckModel model1 = new StockCheckModel((long) 23, 123, 23);
 		myRepo.save(model1);
-		mvc.perform(put("/api/medication/" + model1.getmedId()).contentType(MediaType.APPLICATION_JSON)
-			.content("{\"medicationName\" : \"Adderoll\", \"nhsnum\" : \"123456789\", \"manufacturerid\":23}"))
-		.andExpect(status().isOk())
-		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.medicationName", is("Adderoll")));
-		
-		
+		mvc.perform(put("/api/storecheck/" + model1.getMedicationid()).contentType(MediaType.APPLICATION_JSON)
+				.content("{\"storeid\" : 12 , \"stockno\" : 234, \"minimumstockno\": 23}"))
+		.andExpect(status()
+				.isOk())
+		.andExpect(content()
+				.contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.stockno", is(234)));
 	}
-	
-	
-}
 
+}

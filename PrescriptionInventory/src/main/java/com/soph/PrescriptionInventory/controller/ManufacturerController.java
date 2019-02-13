@@ -45,7 +45,7 @@ public class ManufacturerController {
 
 	// method to get manufacturer by id
 	@GetMapping("/manufacturer/{manufacturerid}")
-	public ManufacturerModel getManufacturerbyID(@PathVariable(value = "medicationid") Long manID) {
+	public ManufacturerModel getManufacturerbyID(@PathVariable(value = "manufacturerid") Long manID) {
 		return myRepository.findById(manID)
 				.orElseThrow(() -> new ResourceNotFoundException("ManufacturerModel", "manufacturerid", manID));
 	}

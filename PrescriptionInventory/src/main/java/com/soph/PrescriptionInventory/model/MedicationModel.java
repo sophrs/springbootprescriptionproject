@@ -31,24 +31,30 @@ public class MedicationModel implements Serializable{
 	private Long medicationid;
 	
 	@NotBlank
-	private String medication_name;
+	private String medicationName;
 	
 	private String NHS_number;
 	
-	private Long manufacturerid;
-//	
-//	public MedicationModel(String medication_name, String Nhsnum, Long manufacturerid) {
-//		this.medication_name = medication_name;
-//		this.NHS_number = Nhsnum;
-//		this.manufacturerid = manufacturerid;
-//	}
+	
+	private Integer manufacturerid;
+	
+	public MedicationModel() {
+		
+		
+	}
+	public MedicationModel(String medicationName, String Nhsnum, Integer manufacturerid) {
+		this.medicationName = medicationName;
+		this.NHS_number = Nhsnum;
+		this.manufacturerid = manufacturerid;
+	}
+	
 
 
-	public Long getManufacturerid() {
+	public Integer getManufacturerid() {
 		return manufacturerid;
 	}
 
-	public void setManufacturerid(Long manufacturerid) {
+	public void setManufacturerid(Integer manufacturerid) {
 		this.manufacturerid = manufacturerid;
 	}
 
@@ -61,12 +67,12 @@ public class MedicationModel implements Serializable{
 	}
 
 	public String getMedicationName() {
-		return medication_name;
+		return medicationName;
 	}
 
 
-	public void setMedicationName(String medication_name) {
-		this.medication_name = medication_name;
+	public void setMedicationName(String medicationName) {
+		this.medicationName = medicationName;
 	}
 
 	public String getNHSNumber() {

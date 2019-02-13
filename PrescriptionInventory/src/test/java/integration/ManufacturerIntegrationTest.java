@@ -1,6 +1,5 @@
 package integration;
 
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -21,67 +20,67 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.soph.PrescriptionInventory.PrescriptionInventoryApplication;
-import com.soph.PrescriptionInventory.model.MedicationModel;
-import com.soph.PrescriptionInventory.repository.MedicationRepository;
+import com.soph.PrescriptionInventory.model.ManufacturerModel;
+import com.soph.PrescriptionInventory.model.StoreModel;
+import com.soph.PrescriptionInventory.repository.ManufacturerRepository;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {PrescriptionInventoryApplication.class})
 @AutoConfigureMockMvc
-public class MedicationIntegrationTest {
-	
+public class ManufacturerIntegrationTest {
+
 	@Autowired
 	private MockMvc mvc;
 	
 	@Autowired
-	private MedicationRepository myRepo;
+	private ManufacturerRepository myRepo;
 
 	@Before
 	public void clearDB() {
 		myRepo.deleteAll();
 	}
 	
+	
 	@Test
-	public void findandretreivemedicationfromdb() throws Exception{
-		myRepo.save(new MedicationModel("Paracetamol","123456789", 23));
-		mvc.perform(get("/api/medication")
+	public void findandretreivemanufacturerfromdb() throws Exception{
+		myRepo.save(new ManufacturerModel ("BootsBrand","12345678", "12 Balamory Road"));
+		mvc.perform(get("/api/manufacturer")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content()
 				.contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$[0]medicationName", is("Paracetamol")));
+				.andExpect(jsonPath("$[0]manufacturer_name", is("BootsBrand")));
 	}
 	
 	@Test
-	public void addMedicationToDatabaseTest() throws Exception{
-			mvc.perform(MockMvcRequestBuilders.post("/api/medication")
+	public void addManufacturertoDatabaseTest() throws Exception{
+			mvc.perform(MockMvcRequestBuilders.post("/api/manufacturer")
 					.contentType(MediaType.APPLICATION_JSON)
-					.content("{\"medicationName\" : \"Paracetamol\", \"nhsnum\" : \"123456789\", \"manufacturerid\":23}"))
+					.content("{\"manufacturer_name\" : \"BootsChemist\", \"address\" : \"12 Balamory Road\", \"phonenumber\": \"12345678}\"}"))
 			.andExpect(status()
 					.isOk())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$.medicationName", is("Paracetamol")));
+			.andExpect(jsonPath("$.manufacturer_name", is("BootsChemist")));
 	}
 	
 	@Test
-	public void deleteMedicationfromDatabaseTest() throws Exception{
-		MedicationModel model1 = new MedicationModel("Paracetamol","123456789", 23);
+	public void deleteManufacturerfromDatabaseTest() throws Exception{
+		ManufacturerModel model1 = new ManufacturerModel("BootsChemist","12345678", "12 Balamory Road");
 		myRepo.save(model1);
-		mvc.perform(delete("/api/medication/"+ model1.getmedId())).andExpect(status().isOk());
+		mvc.perform(delete("/api/manufacturer/"+ model1.getmanId())).andExpect(status().isOk());
 	}
 	
 	@Test
-	public void updateMedicationonDatabaseTest() throws Exception{
-		MedicationModel model1 = new MedicationModel("Paracetamol","123456789", 23);
+	public void updateManufacturerDatabaseTest() throws Exception{
+		ManufacturerModel model1 = new ManufacturerModel("BootsChemist","12345675", "12 Balamory Road");
 		myRepo.save(model1);
-		mvc.perform(put("/api/medication/" + model1.getmedId()).contentType(MediaType.APPLICATION_JSON)
-			.content("{\"medicationName\" : \"Adderoll\", \"nhsnum\" : \"123456789\", \"manufacturerid\":23}"))
+		mvc.perform(put("/api/manufacturer/" + model1.getmanId()).contentType(MediaType.APPLICATION_JSON)
+				.content("{\"manufacturer_name\" : \"Boots\", \"address\" : \"12 Balamory Road\", \"phonenumber\": \"12345675}\"}"))
 		.andExpect(status().isOk())
 		.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.medicationName", is("Adderoll")));
+		.andExpect(jsonPath("$.manufacturer_name", is("Boots")));
 		
 		
 	}
-	
-	
 }
-

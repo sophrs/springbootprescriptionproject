@@ -26,6 +26,16 @@ public class StockCheckModel implements Serializable {
 	private Long storeid;
 	private int stockno;
 	private int minimumstockno;
+	
+	public StockCheckModel() {
+		
+	}
+	
+	public StockCheckModel(Long storeid, int stockno, int minimumstockno) {
+		this.stockno = stockno;
+		this.storeid = storeid;
+		this.minimumstockno = minimumstockno;
+		}
 
 	
 	public Long getMedicationid() {

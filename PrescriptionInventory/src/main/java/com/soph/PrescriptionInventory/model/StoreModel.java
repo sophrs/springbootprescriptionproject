@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,12 +20,21 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class StoreModel implements Serializable {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long storeid;
 	
 	private String storename;
 	private String address;
 	private String phonenumber;
+	
+	public StoreModel() {
+		
+	}
+	public StoreModel(String storename, String address, String phonenumber) {
+		this.storename = storename;
+		this.address = address;
+		this.phonenumber = phonenumber;
+	}
 	public Long getStoreid() {
 		return storeid;
 	}

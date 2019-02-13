@@ -13,6 +13,6 @@ import com.soph.PrescriptionInventory.model.MedicationModel;
 @Repository
 public interface MedicationRepository extends JpaRepository<MedicationModel,Long> {
 
-//	List<MedicationModel> findByMedicationName(String medication_name);
+	List<MedicationModel> findByMedicationName(String medication_name);
 	
 }
